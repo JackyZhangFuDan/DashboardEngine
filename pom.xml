@@ -1,0 +1,458 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.sap.solman</groupId>
+  <artifactId>reportengine</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+ 
+  <properties>
+  	<java.version>1.8</java.version>
+	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	<failOnMissingWebXml>false</failOnMissingWebXml>
+	<maven.tomcat.port>8080</maven.tomcat.port>
+	<!-- specify these in a proxy enabled environment -->
+	<http.proxyHost></http.proxyHost>
+	<http.proxyPort></http.proxyPort>
+	<logback.version>1.1.7</logback.version>
+	<sap.logging.version>2.1.1</sap.logging.version>
+	<spring.version>4.3.3.RELEASE</spring.version>
+	<olingo.version>2.0.10</olingo.version>
+	<cxf.version>3.2.0</cxf.version>
+  </properties>
+  
+  <dependencies>
+  		 
+  	<!-- Spring Framework and Spring WebMVC -->
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-web</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-webmvc</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+ 	
+  	<!-- APIs for servlets and injection -->
+	<dependency>
+		<groupId>javax.servlet</groupId>
+		<artifactId>javax.servlet-api</artifactId>
+		<version>3.0.1</version>
+		<scope>provided</scope>
+	</dependency>
+	<dependency>     
+		<groupId>javax.servlet</groupId>    
+		<artifactId>jsp-api</artifactId>     
+		<version>2.0</version>     
+		<scope>provided</scope>
+	</dependency>
+	<dependency>
+		<groupId>javax.inject</groupId>
+		<artifactId>javax.inject</artifactId>
+		<version>1</version>
+	</dependency>
+	
+	<!-- JSON conversion -->
+	<dependency>
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-databind</artifactId>
+		<version>2.8.1</version>
+	</dependency>
+	
+	<!-- Logging library -->
+	<dependency>
+		<groupId>ch.qos.logback</groupId>
+		<artifactId>logback-classic</artifactId>
+		<version>${logback.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>com.sap.hcp.cf.logging</groupId>
+		<artifactId>cf-java-logging-support-logback</artifactId>
+		<version>${sap.logging.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>com.sap.hcp.cf.logging</groupId>
+		<artifactId>cf-java-logging-support-servlet</artifactId>
+		<version>${sap.logging.version}</version>
+	</dependency>	
+	
+	<!-- Security -->
+	<dependency>
+		<groupId>com.sap.xs2.security</groupId>
+		<artifactId>java-container-security</artifactId>
+			<version>0.28.6</version> 
+	</dependency>
+	<dependency>
+	    <groupId>com.sap.xs2.security</groupId>
+	    <artifactId>security-commons</artifactId>
+	    <version>0.28.6</version>
+	</dependency>
+	<dependency>
+	    <groupId>com.sap.xs2.security</groupId>
+	    <artifactId>java-container-security-api</artifactId>
+	    <version>0.28.6</version> 
+	</dependency>
+	<dependency>
+	    <groupId>com.sap.security.nw.sso.linuxx86_64.opt</groupId>
+	    <artifactId>sapjwt.linuxx86_64</artifactId>
+	    <version>1.1.19</version>
+	</dependency> 
+	<dependency> <!-- windows -->
+	    <groupId>com.sap.security.nw.sso.ntamd64.opt</groupId>
+	    <artifactId>sapjwt.ntamd64</artifactId>
+	    <version>1.1.19</version>
+	</dependency>
+	
+	<!-- Spring Security and other related libraries-->
+	<dependency>
+	    <groupId>org.springframework.security</groupId>
+	    <artifactId>spring-security-jwt</artifactId>
+	    <version>1.0.8.RELEASE</version>
+	    <exclusions>
+	        <exclusion>
+	            <artifactId>bcpkix-jdk15on</artifactId>
+	            <groupId>org.bouncycastle</groupId>
+	        </exclusion>
+	    </exclusions>
+	</dependency>
+	<dependency>
+	    <groupId>org.springframework.security.oauth</groupId>
+	    <artifactId>spring-security-oauth2</artifactId>
+	    <version>2.0.11.RELEASE</version>
+	</dependency>
+	
+	<!-- JSON conversion -->
+	<dependency>
+	    <groupId>org.json</groupId>
+	    <artifactId>json</artifactId>
+	    <version>20180130</version>
+	</dependency>
+		
+	<!-- Testing -->
+	<dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+		<version>4.12</version>
+		<scope>test</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-test</artifactId>
+		<version>${spring.version}</version>
+		<scope>test</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.hamcrest</groupId>
+		<artifactId>hamcrest-library</artifactId>
+		<version>1.3</version>
+		<scope>test</scope>
+	</dependency>
+	
+	
+	<dependency>
+		<groupId>org.springframework.data</groupId>
+		<artifactId>spring-data-jpa</artifactId>
+		<version>1.9.2.RELEASE</version>
+		<exclusions>
+			<exclusion>
+				<!-- We need spring-core 4.2 or later, but spring-data includes 4.1.9  -->
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-core</artifactId>
+			</exclusion>
+		</exclusions>
+	</dependency>
+	 
+	
+	<!-- EclipseLink as JPA implementation -->
+	<dependency>
+		<groupId>org.eclipse.persistence</groupId>
+		<artifactId>org.eclipse.persistence.jpa</artifactId>
+		<version>2.6.2</version>
+	</dependency>
+	<!-- PostgreSQL database implementations -->
+	<dependency>
+		<groupId>org.postgresql</groupId>
+		<artifactId>postgresql</artifactId>
+		<version>9.4-1206-jdbc41</version>
+		<scope>runtime</scope>
+	</dependency>
+	<!-- Mysql database implementations -->
+	<dependency>
+	    <groupId>mysql</groupId>
+	    <artifactId>mysql-connector-java</artifactId>
+	    <version>8.0.11</version> <!--5.1.6 -->
+	    <scope>runtime</scope>
+	</dependency>
+	<!-- connection pooling -->
+	<dependency>
+		<groupId>org.apache.commons</groupId>
+		<artifactId>commons-dbcp2</artifactId>
+		<version>2.1.1</version>
+		<scope>runtime</scope>
+	</dependency>
+    	<dependency>
+	    <groupId>org.apache.commons</groupId>
+	    <artifactId>commons-pool2</artifactId>
+	    <version>2.4.2</version>
+	</dependency>
+  	
+  	<dependency>
+	    <groupId>commons-io</groupId>
+	    <artifactId>commons-io</artifactId>
+	    <version>2.4</version>
+	</dependency>
+	
+	
+	<!-- 
+	<dependency>
+		<groupId>birt</groupId>
+	    <artifactId>chartengineapi</artifactId>
+	    <version>1</version>
+	    <scope>system</scope>
+	    <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/chartengineapi.jar</systemPath>
+	</dependency>
+	
+	<dependency>
+		<groupId>birt</groupId>
+	    <artifactId>chartitemapi</artifactId>
+	    <version>1</version>
+	    <scope>system</scope>
+	    <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/chartitemapi.jar</systemPath>
+	</dependency>
+	
+	<dependency>
+		<groupId>birt</groupId>
+	    <artifactId>ibmicu</artifactId>
+	    <version>1</version>
+	    <scope>system</scope>
+	    <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/com.ibm.icu_58.2.0.v20170418-1837.jar</systemPath>
+	</dependency>
+	
+	<dependency>
+		<groupId>birt</groupId>
+	    <artifactId>crosstabcoreapi</artifactId>
+	    <version>1</version>
+	    <scope>system</scope>
+	    <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/crosstabcoreapi.jar</systemPath>
+	</dependency>
+	
+	
+	<dependency>
+		<groupId>birt</groupId>
+	    <artifactId>dataadapterapi</artifactId>
+	    <version>1</version>
+	    <scope>system</scope>
+	    <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/dataadapterapi.jar</systemPath>
+	</dependency>
+	
+	<dependency>
+		<groupId>birt</groupId>
+	    <artifactId>dataaggregationapi</artifactId>
+	    <version>1</version>
+	    <scope>system</scope>
+	    <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/dataaggregationapi.jar</systemPath>
+	</dependency>
+	
+	<dependency>
+		<groupId>birt</groupId>
+	    <artifactId>dataextraction</artifactId>
+	    <version>1</version>
+	    <scope>system</scope>
+	    <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/dataextraction.jar</systemPath>
+	</dependency>
+	
+	<dependency>
+		<groupId>birt</groupId>
+	    <artifactId>dteapi</artifactId>
+	    <version>1</version>
+	    <scope>system</scope>
+	    <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/dteapi.jar</systemPath>
+	</dependency>
+	
+	
+	<dependency>
+		<groupId>birt</groupId>
+	    <artifactId>engineapi</artifactId>
+	    <version>1</version>
+	    <scope>system</scope>
+	    <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/engineapi.jar</systemPath>
+	</dependency>
+	
+	<dependency>
+		<groupId>birt</groupId>
+	    <artifactId>flute</artifactId>
+	    <version>1</version>
+	    <scope>system</scope>
+	    <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/flute.jar</systemPath>
+	</dependency>
+	
+	<dependency>
+		<groupId>birt</groupId>
+	    <artifactId>js</artifactId>
+	    <version>1</version>
+	    <scope>system</scope>
+	    <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/js.jar</systemPath>
+	</dependency>
+	
+	<dependency>
+		<groupId>birt</groupId>
+	    <artifactId>odaconnectivity</artifactId>
+	    <version>1</version>
+	    <scope>system</scope>
+	    <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/odaconnectivity.jar</systemPath>
+	</dependency>
+	
+	<dependency>
+		<groupId>birt</groupId>
+	    <artifactId>emf_common_codec</artifactId>
+	    <version>1</version>
+	    <scope>system</scope>
+	    <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/org.eclipse.emf.common_2.13.0.v20170609-0707.jar</systemPath>
+	</dependency>
+	
+	<dependency>
+		<groupId>birt</groupId>
+	    <artifactId>emf_ecore</artifactId>
+	    <version>1</version>
+	    <scope>system</scope>
+	    <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/org.eclipse.emf.ecore_2.13.0.v20170609-0707.jar</systemPath>
+	</dependency>
+	
+	<dependency>
+		<groupId>birt</groupId>
+	    <artifactId>emf_ecore_xmi</artifactId>
+	    <version>1</version>
+	    <scope>system</scope>
+	    <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/org.eclipse.emf.ecore.xmi_2.13.0.v20170609-0707.jar</systemPath>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.eclipse.platform</groupId>
+	    <artifactId>org.eclipse.core.runtime</artifactId>
+	    <version>3.13.0</version>
+	    <scope>system</scope>
+	    <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/org.eclipse.core.runtime_3.13.0.v20170207-1030.jar</systemPath>
+	</dependency>
+		
+	<dependency>
+		<groupId>birt</groupId>
+	    <artifactId>scriptapi</artifactId>
+	    <version>1</version>
+	    <scope>system</scope>
+	    <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/scriptapi.jar</systemPath>
+	</dependency>
+	
+	<dependency>
+		<groupId>birt</groupId>
+	    <artifactId>odadesignapi</artifactId>
+	    <version>1</version>
+	    <scope>system</scope>
+	    <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/odadesignapi.jar</systemPath>
+	</dependency>
+	
+	<dependency>
+	    <groupId>commons-cli</groupId>
+	    <artifactId>commons-cli</artifactId>
+	    <version>1.0</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>commons-codec</groupId>
+	    <artifactId>commons-codec</artifactId>
+	    <version>1.9</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.eclipse.birt.runtime</groupId>
+	    <artifactId>org.w3c.css.sac</artifactId>
+	    <version>1.3.1.v200903091627</version>
+	</dependency>
+	
+	-->
+	
+	
+	<dependency>
+		<groupId>birt</groupId>
+	    <artifactId>runtime</artifactId>
+	    <version>1</version>
+	    <scope>system</scope>
+	    <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/org.eclipse.birt.runtime_4.7.0-20170622.jar</systemPath>
+	</dependency>
+	
+	<dependency>
+	    <groupId>com.sap.solman</groupId>
+	    <artifactId>ProjectDashboardDataSource</artifactId>
+	    <version>201905</version>
+	    <scope>system</scope>
+	    <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/ProjectDashboardDataSource-201905.jar</systemPath>
+	</dependency>
+	
+  </dependencies>
+  
+  <build>
+  	<finalName>reportengine</finalName>
+  	<plugins>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-compiler-plugin</artifactId>
+			<version>3.5</version>
+			<configuration>
+				<source>${java.version}</source>
+				<target>${java.version}</target>
+			</configuration>
+		</plugin>
+		<plugin>
+			<!-- Provides the application at http://localhost:8080/ using an embedded 
+				Tomcat server with a pre-configured environment referencing the SAP proxy -->
+			<groupId>org.apache.tomcat.maven</groupId>
+			<artifactId>tomcat7-maven-plugin</artifactId>
+			<version>2.2</version>
+			<configuration>
+				<port>${maven.tomcat.port}</port>
+				<path>/</path>
+				<systemProperties>
+					<http.proxyHost>${http.proxyHost}</http.proxyHost>
+					<http.proxyPort>${http.proxyPort}</http.proxyPort>
+				</systemProperties>
+			</configuration>
+		</plugin>
+		<plugin>
+			<groupId>org.codehaus.mojo</groupId>
+			<artifactId>findbugs-maven-plugin</artifactId>
+			<version>3.0.2</version>
+			<executions>
+				<execution>
+					<phase>verify</phase>
+					<goals>
+						<goal>findbugs</goal>
+					</goals>
+				</execution>
+			</executions>
+		</plugin>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-pmd-plugin</artifactId>
+			<version>3.5</version>
+			<executions>
+				<execution>
+					<phase>verify</phase>
+					<goals>
+						<goal>pmd</goal>
+						<goal>cpd</goal>
+					</goals>
+				</execution>
+			</executions>
+		</plugin>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-surefire-plugin</artifactId>
+			<version>2.18.1</version>
+		</plugin>
+  	</plugins>
+  </build>
+
+</project>
