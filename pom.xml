@@ -80,33 +80,6 @@
 		<version>${sap.logging.version}</version>
 	</dependency>	
 	
-	<!-- Security -->
-	<dependency>
-		<groupId>com.sap.xs2.security</groupId>
-		<artifactId>java-container-security</artifactId>
-			<version>0.28.6</version> 
-	</dependency>
-	<dependency>
-	    <groupId>com.sap.xs2.security</groupId>
-	    <artifactId>security-commons</artifactId>
-	    <version>0.28.6</version>
-	</dependency>
-	<dependency>
-	    <groupId>com.sap.xs2.security</groupId>
-	    <artifactId>java-container-security-api</artifactId>
-	    <version>0.28.6</version> 
-	</dependency>
-	<dependency>
-	    <groupId>com.sap.security.nw.sso.linuxx86_64.opt</groupId>
-	    <artifactId>sapjwt.linuxx86_64</artifactId>
-	    <version>1.1.19</version>
-	</dependency> 
-	<dependency> <!-- windows -->
-	    <groupId>com.sap.security.nw.sso.ntamd64.opt</groupId>
-	    <artifactId>sapjwt.ntamd64</artifactId>
-	    <version>1.1.19</version>
-	</dependency>
-	
 	<!-- Spring Security and other related libraries-->
 	<dependency>
 	    <groupId>org.springframework.security</groupId>
@@ -381,14 +354,6 @@
 	    <version>1</version>
 	    <scope>system</scope>
 	    <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/org.eclipse.birt.runtime_4.7.0-20170622.jar</systemPath>
-	</dependency>
-	
-	<dependency>
-	    <groupId>com.sap.solman</groupId>
-	    <artifactId>ProjectDashboardDataSource</artifactId>
-	    <version>201905</version>
-	    <scope>system</scope>
-	    <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/ProjectDashboardDataSource-201905.jar</systemPath>
 	</dependency>
 	
   </dependencies>
